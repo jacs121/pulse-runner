@@ -683,7 +683,6 @@
         <div class="menu-section">
             <div class="menu-section-title">Volume</div>
             <div class="volume-control">
-                <span class="volume-icon">🔊</span>
                 <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="70">
                 <span class="volume-value" id="volumeValue">70%</span>
             </div>
@@ -693,7 +692,7 @@
             <div class="menu-section-title">Audio</div>
             <div class="file-input-wrapper">
                 <input type="file" id="audioFile" class="file-input" accept="audio/*">
-                <button class="file-btn" id="fileBtn">📀 Select Song</button>
+                <button class="file-btn" id="fileBtn">Select Song</button>
                 <p class="song-info" id="songInfo"></p>
             </div>
         </div>
@@ -718,7 +717,6 @@
             <div class="progress-bar" id="progressBar"></div>
         </div>
         <div class="health-container">
-            <span class="health-icon">❤️</span>
             <div class="health-bar" id="healthBar"></div>
         </div>
         <div class="stats-display">
@@ -1502,7 +1500,7 @@
                     
                 } catch (err) {
                     console.error('Error loading audio:', err);
-                    fileBtn.textContent = '❌ Error loading file';
+                    fileBtn.textContent = 'Error loading file';
                     fileBtn.classList.remove('loaded');
                     showScanning(false);
                 }
@@ -1610,7 +1608,7 @@
             gameState.elapsedTime = 0;
             
             // Reset file button
-            document.getElementById('fileBtn').textContent = '📀 Select Song';
+            document.getElementById('fileBtn').textContent = 'Select Song';
             document.getElementById('fileBtn').classList.remove('loaded');
             document.getElementById('songInfo').classList.remove('visible');
             document.getElementById('startBtn').classList.remove('visible');
