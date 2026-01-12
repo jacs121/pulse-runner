@@ -143,7 +143,7 @@
             margin-bottom: 1rem;
             backdrop-filter: blur(10px);
             min-width: 320px;
-            max-width: 400px;
+            max-width: 420px;
             width: 90%;
         }
 
@@ -164,12 +164,12 @@
 
         .difficulty-btn {
             flex: 1;
-            padding: 0.75rem 1rem;
+            padding: 0.75rem 0.75rem;
             border: 2px solid #334155;
             background: transparent;
             color: #94a3b8;
             font-family: 'Orbitron', sans-serif;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             cursor: pointer;
             border-radius: 8px;
             transition: all 0.3s ease;
@@ -988,7 +988,7 @@
         <p class="menu-subtitle">RHYTHM ACTION GAME</p>
 
         <div class="menu-section">
-            <div class="menu-section-title">Difficulty</div>
+            <div class="menu-section-title">1. Difficulty</div>
             <div class="difficulty-selector">
                 <button class="difficulty-btn" data-difficulty="easy">Easy</button>
                 <button class="difficulty-btn" data-difficulty="medium">Medium</button>
@@ -998,7 +998,7 @@
         </div>
 
         <div class="menu-section">
-            <div class="menu-section-title">Volume</div>
+            <div class="menu-section-title">2. Volume</div>
             <div class="volume-control">
                 <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="70">
                 <span class="volume-value" id="volumeValue">70%</span>
@@ -1006,7 +1006,7 @@
         </div>
 
         <div class="menu-section">
-            <div class="menu-section-title">Audio</div>
+            <div class="menu-section-title">3. Audio</div>
             <div class="file-input-wrapper">
                 <input type="file" id="audioFile" class="file-input" accept="audio/*">
                 <button class="file-btn" id="fileBtn">Select Song</button>
