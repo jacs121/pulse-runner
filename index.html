@@ -46,18 +46,20 @@
 
         /* Main Menu */
         #mainMenu {
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%);
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.98) 100%);
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
+            padding-top: 2rem;
             z-index: 20;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
+            transition: opacity 0.5s ease, visibility 0.5s ease, background 0.5s ease;
+            overflow-y: auto;
         }
 
         #mainMenu.hidden {
@@ -66,31 +68,83 @@
             pointer-events: none;
         }
 
+        /* Difficulty-based background colors */
+        #mainMenu[data-difficulty="easy"] {
+            background: linear-gradient(135deg, rgba(20, 40, 30, 0.98) 0%, rgba(34, 197, 94, 0.1) 100%);
+        }
+        
+        #mainMenu[data-difficulty="medium"] {
+            background: linear-gradient(135deg, rgba(40, 35, 20, 0.98) 0%, rgba(250, 204, 21, 0.1) 100%);
+        }
+        
+        #mainMenu[data-difficulty="hard"] {
+            background: linear-gradient(135deg, rgba(40, 25, 20, 0.98) 0%, rgba(249, 115, 22, 0.1) 100%);
+        }
+        
+        #mainMenu[data-difficulty="pro"] {
+            background: linear-gradient(135deg, rgba(40, 20, 20, 0.98) 0%, rgba(239, 68, 68, 0.15) 100%);
+        }
+        
+        /* Difficulty-based font colors */
+        #mainMenu[data-difficulty="easy"] .menu-title,
+        #mainMenu[data-difficulty="easy"] .menu-section-title,
+        #mainMenu[data-difficulty="easy"] .volume-icon,
+        #mainMenu[data-difficulty="easy"] .volume-value {
+            color: #22c55e;
+            text-shadow: 0 0 15px rgba(34, 197, 94, 0.5);
+        }
+        
+        #mainMenu[data-difficulty="medium"] .menu-title,
+        #mainMenu[data-difficulty="medium"] .menu-section-title,
+        #mainMenu[data-difficulty="medium"] .volume-icon,
+        #mainMenu[data-difficulty="medium"] .volume-value {
+            color: #facc15;
+            text-shadow: 0 0 15px rgba(250, 204, 21, 0.5);
+        }
+        
+        #mainMenu[data-difficulty="hard"] .menu-title,
+        #mainMenu[data-difficulty="hard"] .menu-section-title,
+        #mainMenu[data-difficulty="hard"] .volume-icon,
+        #mainMenu[data-difficulty="hard"] .volume-value {
+            color: #f97316;
+            text-shadow: 0 0 15px rgba(249, 115, 22, 0.5);
+        }
+        
+        #mainMenu[data-difficulty="pro"] .menu-title,
+        #mainMenu[data-difficulty="pro"] .menu-section-title,
+        #mainMenu[data-difficulty="pro"] .volume-icon,
+        #mainMenu[data-difficulty="pro"] .volume-value {
+            color: #ef4444;
+            text-shadow: 0 0 15px rgba(239, 68, 68, 0.5);
+        }
+
         .menu-title {
             font-family: 'Orbitron', sans-serif;
-            font-size: 4rem;
+            font-size: 3rem;
             font-weight: 900;
             color: #38bdf8;
             text-shadow: 0 0 20px rgba(56, 189, 248, 0.8), 0 0 40px rgba(56, 189, 248, 0.4);
-            margin-bottom: 0.5rem;
-            letter-spacing: 4px;
+            margin-bottom: 0.25rem;
+            letter-spacing: 3px;
         }
 
         .menu-subtitle {
-            font-size: 1.2rem;
+            font-size: 1rem;
             color: #94a3b8;
-            margin-bottom: 3rem;
+            margin-bottom: 1.5rem;
             letter-spacing: 2px;
         }
 
         .menu-section {
             background: rgba(30, 41, 59, 0.8);
-            padding: 2rem 3rem;
-            border-radius: 16px;
+            padding: 1.25rem 2rem;
+            border-radius: 12px;
             border: 1px solid rgba(56, 189, 248, 0.2);
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
             backdrop-filter: blur(10px);
-            min-width: 350px;
+            min-width: 320px;
+            max-width: 400px;
+            width: 90%;
         }
 
         .menu-section-title {
@@ -198,6 +252,43 @@
         .volume-slider::-webkit-slider-thumb:hover {
             transform: scale(1.2);
         }
+        
+        /* Difficulty-based volume slider colors */
+        #mainMenu[data-difficulty="easy"] .volume-slider::-webkit-slider-thumb {
+            background: #22c55e;
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.6);
+        }
+        
+        #mainMenu[data-difficulty="medium"] .volume-slider::-webkit-slider-thumb {
+            background: #facc15;
+            box-shadow: 0 0 10px rgba(250, 204, 21, 0.6);
+        }
+        
+        #mainMenu[data-difficulty="hard"] .volume-slider::-webkit-slider-thumb {
+            background: #f97316;
+            box-shadow: 0 0 10px rgba(249, 115, 22, 0.6);
+        }
+        
+        #mainMenu[data-difficulty="pro"] .volume-slider::-webkit-slider-thumb {
+            background: #ef4444;
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
+        }
+        
+        #mainMenu[data-difficulty="easy"] .volume-slider {
+            background: rgba(34, 197, 94, 0.5);
+        }
+        
+        #mainMenu[data-difficulty="medium"] .volume-slider {
+            background: rgba(250, 204, 21, 0.5);
+        }
+        
+        #mainMenu[data-difficulty="hard"] .volume-slider {
+            background: rgba(249, 115, 22, 0.5);
+        }
+        
+        #mainMenu[data-difficulty="pro"] .volume-slider {
+            background: rgba(239, 68, 68, 0.5);
+        }
 
         .volume-value {
             font-family: 'Orbitron', sans-serif;
@@ -236,14 +327,55 @@
         }
 
         .file-btn.loaded {
+            border-color: #94a3b8;
+            color: #94a3b8;
+        }
+        
+        /* Difficulty-based file button colors */
+        #mainMenu[data-difficulty="easy"] .file-btn {
             border-color: #22c55e;
             color: #22c55e;
+        }
+        
+        #mainMenu[data-difficulty="easy"] .file-btn:hover {
+            background: rgba(34, 197, 94, 0.2);
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.4);
+        }
+        
+        #mainMenu[data-difficulty="medium"] .file-btn {
+            border-color: #facc15;
+            color: #facc15;
+        }
+        
+        #mainMenu[data-difficulty="medium"] .file-btn:hover {
+            background: rgba(250, 204, 21, 0.2);
+            box-shadow: 0 0 20px rgba(250, 204, 21, 0.4);
+        }
+        
+        #mainMenu[data-difficulty="hard"] .file-btn {
+            border-color: #f97316;
+            color: #f97316;
+        }
+        
+        #mainMenu[data-difficulty="hard"] .file-btn:hover {
+            background: rgba(249, 115, 22, 0.2);
+            box-shadow: 0 0 20px rgba(249, 115, 22, 0.4);
+        }
+        
+        #mainMenu[data-difficulty="pro"] .file-btn {
+            border-color: #ef4444;
+            color: #ef4444;
+        }
+        
+        #mainMenu[data-difficulty="pro"] .file-btn:hover {
+            background: rgba(239, 68, 68, 0.2);
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
         }
 
         .song-info {
             margin-top: 0.75rem;
             font-size: 0.85rem;
-            color: #22c55e;
+            color: #94a3b8;
             text-align: center;
             display: none;
         }
@@ -251,23 +383,48 @@
         .song-info.visible {
             display: block;
         }
+        
+        /* Difficulty-based song-info colors */
+        #mainMenu[data-difficulty="easy"] .song-info {
+            color: #22c55e;
+        }
+        
+        #mainMenu[data-difficulty="medium"] .song-info {
+            color: #facc15;
+        }
+        
+        #mainMenu[data-difficulty="hard"] .song-info {
+            color: #f97316;
+        }
+        
+        #mainMenu[data-difficulty="pro"] .song-info {
+            color: #ef4444;
+        }
 
-        /* Start Button */
+        /* Start Button Container */
+        .start-btn-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 1rem 0 2rem 0;
+            padding-bottom: 1rem;
+        }
+
         #startBtn {
-            padding: 1.2rem 4rem;
+            display: none;
+            padding: 0.875rem 2.5rem;
             border: none;
             background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%);
             color: #0f172a;
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.2rem;
+            font-size: 1rem;
             font-weight: 700;
             cursor: pointer;
             border-radius: 50px;
             letter-spacing: 3px;
             transition: all 0.3s ease;
-            margin-top: 1rem;
-            display: none;
-            box-shadow: 0 0 30px rgba(56, 189, 248, 0.5);
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.5);
         }
 
         #startBtn.visible {
@@ -339,6 +496,35 @@
             align-items: center;
         }
 
+        /* HUD Difficulty-based colors */
+        body[data-difficulty="easy"] #hud .stat-value,
+        body[data-difficulty="easy"] #hud .health-segment:not(.lost) {
+            color: #22c55e;
+            background: rgba(34, 197, 94, 0.5);
+            text-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+        }
+        
+        body[data-difficulty="medium"] #hud .stat-value,
+        body[data-difficulty="medium"] #hud .health-segment:not(.lost) {
+            color: #facc15;
+            background: rgba(250, 204, 21, 0.5);
+            text-shadow: 0 0 10px rgba(250, 204, 21, 0.5);
+        }
+        
+        body[data-difficulty="hard"] #hud .stat-value,
+        body[data-difficulty="hard"] #hud .health-segment:not(.lost) {
+            color: #f97316;
+            background: rgba(249, 115, 22, 0.5);
+            text-shadow: 0 0 10px rgba(249, 115, 22, 0.5);
+        }
+        
+        body[data-difficulty="pro"] #hud .stat-value,
+        body[data-difficulty="pro"] #hud .health-segment:not(.lost) {
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.5);
+            text-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+        }
+
         /* Progress Bar */
         .progress-container {
             position: absolute;
@@ -351,9 +537,29 @@
 
         .progress-bar {
             height: 100%;
-            background: linear-gradient(90deg, #38bdf8, #f472b6);
             width: 0%;
             transition: width 0.1s linear;
+        }
+        
+        /* Difficulty-based progress bar colors */
+        body[data-difficulty="easy"] .progress-bar {
+            background: linear-gradient(90deg, #22c55e, #4ade80);
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+        }
+        
+        body[data-difficulty="medium"] .progress-bar {
+            background: linear-gradient(90deg, #facc15, #fde047);
+            box-shadow: 0 0 10px rgba(250, 204, 21, 0.5);
+        }
+        
+        body[data-difficulty="hard"] .progress-bar {
+            background: linear-gradient(90deg, #f97316, #fb923c);
+            box-shadow: 0 0 10px rgba(249, 115, 22, 0.5);
+        }
+        
+        body[data-difficulty="pro"] .progress-bar {
+            background: linear-gradient(90deg, #ef4444, #f87171);
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
         }
 
         /* Health Bar */
@@ -409,17 +615,17 @@
 
         /* Pause Menu */
         #pauseMenu {
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(15, 23, 42, 0.95);
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.98);
             display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            z-index: 30;
+            z-index: 1000;
         }
 
         #pauseMenu.visible {
@@ -474,6 +680,51 @@
 
         .end-title.defeat {
             color: #ef4444;
+        }
+        
+        /* End screen difficulty-based colors */
+        body[data-difficulty="easy"] .end-title.victory,
+        body[data-difficulty="easy"] .end-stat-value {
+            color: #22c55e;
+            text-shadow: 0 0 20px rgba(34, 197, 94, 0.6);
+        }
+        
+        body[data-difficulty="medium"] .end-title.victory,
+        body[data-difficulty="medium"] .end-stat-value {
+            color: #facc15;
+            text-shadow: 0 0 20px rgba(250, 204, 21, 0.6);
+        }
+        
+        body[data-difficulty="hard"] .end-title.victory,
+        body[data-difficulty="hard"] .end-stat-value {
+            color: #f97316;
+            text-shadow: 0 0 20px rgba(249, 115, 22, 0.6);
+        }
+        
+        body[data-difficulty="pro"] .end-title.victory,
+        body[data-difficulty="pro"] .end-stat-value {
+            color: #ef4444;
+            text-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
+        }
+        
+        body[data-difficulty="easy"] .end-stat {
+            border-color: rgba(34, 197, 94, 0.3);
+            background: rgba(34, 197, 94, 0.1);
+        }
+        
+        body[data-difficulty="medium"] .end-stat {
+            border-color: rgba(250, 204, 21, 0.3);
+            background: rgba(250, 204, 21, 0.1);
+        }
+        
+        body[data-difficulty="hard"] .end-stat {
+            border-color: rgba(249, 115, 22, 0.3);
+            background: rgba(249, 115, 22, 0.1);
+        }
+        
+        body[data-difficulty="pro"] .end-stat {
+            border-color: rgba(239, 68, 68, 0.3);
+            background: rgba(239, 68, 68, 0.1);
         }
 
         .end-stats {
@@ -584,7 +835,6 @@
             transform: scale(0.95);
         }
 
-        /*通用按钮样式*/
         .btn {
             padding: 1rem 2rem;
             border: none;
@@ -621,7 +871,6 @@
             margin-top: 1rem;
         }
 
-        /*响应式调整*/
         @media (max-width: 768px) {
             .menu-title {
                 font-size: 2.5rem;
@@ -646,13 +895,81 @@
             }
         }
 
+        .start-btn-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 1rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+        }
+
+        #startBtn {
+            display: none;
+            padding: 0.875rem 2.5rem;
+            border: none;
+            background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%);
+            color: #0f172a;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 50px;
+            letter-spacing: 3px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.5);
+        }
+        
+        #startBtn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(56, 189, 248, 0.7);
+        }
+        
+        /* Difficulty-based START button colors */
+        #mainMenu[data-difficulty="easy"] #startBtn {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            box-shadow: 0 0 25px rgba(34, 197, 94, 0.6);
+        }
+        
+        #mainMenu[data-difficulty="medium"] #startBtn {
+            background: linear-gradient(135deg, #facc15 0%, #eab308 100%);
+            box-shadow: 0 0 25px rgba(250, 204, 21, 0.6);
+        }
+        
+        #mainMenu[data-difficulty="hard"] #startBtn {
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            box-shadow: 0 0 25px rgba(249, 115, 22, 0.6);
+        }
+        
+        #mainMenu[data-difficulty="pro"] #startBtn {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            box-shadow: 0 0 25px rgba(239, 68, 68, 0.6);
+        }
+
         /*提示文字*/
         .controls-hint {
-            position: absolute;
-            bottom: 2rem;
+            margin-top: 1.5rem;
             color: #64748b;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             text-align: center;
+            letter-spacing: 1px;
+        }
+        
+        /* Difficulty-based hint colors */
+        #mainMenu[data-difficulty="easy"] .controls-hint {
+            color: rgba(34, 197, 94, 0.7);
+        }
+        
+        #mainMenu[data-difficulty="medium"] .controls-hint {
+            color: rgba(250, 204, 21, 0.7);
+        }
+        
+        #mainMenu[data-difficulty="hard"] .controls-hint {
+            color: rgba(249, 115, 22, 0.7);
+        }
+        
+        #mainMenu[data-difficulty="pro"] .controls-hint {
+            color: rgba(239, 68, 68, 0.7);
         }
 
         @media (max-width: 768px) {
@@ -673,7 +990,7 @@
         <div class="menu-section">
             <div class="menu-section-title">Difficulty</div>
             <div class="difficulty-selector">
-                <button class="difficulty-btn active" data-difficulty="easy">Easy</button>
+                <button class="difficulty-btn" data-difficulty="easy">Easy</button>
                 <button class="difficulty-btn" data-difficulty="medium">Medium</button>
                 <button class="difficulty-btn" data-difficulty="hard">Hard</button>
                 <button class="difficulty-btn" data-difficulty="pro">Pro</button>
@@ -697,7 +1014,9 @@
             </div>
         </div>
 
-        <button class="btn" id="startBtn">START</button>
+        <div class="start-btn-container">
+            <button class="btn" id="startBtn">START</button>
+        </div>
 
         <p class="controls-hint">Use WASD or Arrow Keys to move | Space to Dash | ESC to Pause</p>
     </div>
@@ -787,46 +1106,85 @@
 
     <script>
         // ==================== GAME CONFIGURATION ====================
+        const DIFFICULTY_COLORS = {
+            easy: {
+                player: '#22c55e',
+                playerDash: '#4ade80',
+                obstacle: '#4ade80',
+                laserWarning: 'rgba(34, 197, 94, 0.4)',
+                laserActive: '#22c55e',
+                background: '#0a1a12',
+                grid: '#14532d'
+            },
+            medium: {
+                player: '#facc15',
+                playerDash: '#fde047',
+                obstacle: '#fde047',
+                laserWarning: 'rgba(250, 204, 21, 0.4)',
+                laserActive: '#facc15',
+                background: '#1a140a',
+                grid: '#45320a'
+            },
+            hard: {
+                player: '#f97316',
+                playerDash: '#fb923c',
+                obstacle: '#fb923c',
+                laserWarning: 'rgba(249, 115, 22, 0.4)',
+                laserActive: '#f97316',
+                background: '#1a0f0a',
+                grid: '#4a1d0a'
+            },
+            pro: {
+                player: '#ef4444',
+                playerDash: '#f87171',
+                obstacle: '#f87171',
+                laserWarning: 'rgba(239, 68, 68, 0.4)',
+                laserActive: '#ef4444',
+                background: '#1a0a0a',
+                grid: '#4a0a0a'
+            }
+        };
+        
         const CONFIG = {
             difficulties: {
                 easy: {
                     name: 'Easy',
                     speedMultiplier: 1.0,
-                    maxHealth: 5,
+                    maxHealth: 6,
                     warningTime: 2000,
-                    laserDuration: 800,
-                    beatSensitivity: 1.5
+                    laserDuration: 300,
+                    beatSensitivity: 1.0
                 },
                 medium: {
                     name: 'Medium',
                     speedMultiplier: 1.3,
-                    maxHealth: 3,
+                    maxHealth: 5,
                     warningTime: 1500,
-                    laserDuration: 600,
-                    beatSensitivity: 1.2
+                    laserDuration: 400,
+                    beatSensitivity: 0.65
                 },
                 hard: {
                     name: 'Hard',
                     speedMultiplier: 1.6,
-                    maxHealth: 2,
+                    maxHealth: 4,
                     warningTime: 1000,
-                    laserDuration: 400,
-                    beatSensitivity: 1.0
+                    laserDuration: 600,
+                    beatSensitivity: 0.25
                 },
                 pro: {
                     name: 'Pro Gamer',
                     speedMultiplier: 2.0,
-                    maxHealth: 1,
+                    maxHealth: 2,
                     warningTime: 600,
-                    laserDuration: 300,
-                    beatSensitivity: 0.7
+                    laserDuration: 800,
+                    beatSensitivity: 0.15
                 }
             },
             player: {
                 size: 30,
                 speed: 8,
-                dashSpeed: 20,
-                dashDuration: 200,
+                dashSpeed: 15,
+                dashDuration: 100,
                 dashCooldown: 1000,
                 invulnerabilityTime: 500
             },
@@ -851,7 +1209,7 @@
             playing: false,
             paused: false,
             ended: false,
-            difficulty: 'easy',
+            difficulty: 'none',
             volume: 0.7,
             audioContext: null,
             audioBuffer: null,
@@ -896,27 +1254,37 @@
                 this.speed = CONFIG.player.speed;
                 this.health = CONFIG.difficulties[gameState.difficulty].maxHealth;
                 this.maxHealth = this.health;
-                this.velocityX = 0;
-                this.velocityY = 0;
+                this.targetX = 150;
+                this.targetY = canvas.height / 2;
             }
 
             update(deltaTime) {
-                // Apply velocity with friction
-                this.x += this.velocityX;
-                this.y += this.velocityY;
-
-                // Friction
-                this.velocityX *= 0.9;
-                this.velocityY *= 0.9;
+                // Handle dashing movement (velocity-based)
+                if (gameState.isDashing) {
+                    this.x += this.dashVelX;
+                    this.y += this.dashVelY;
+                    this.targetX = this.x
+                    this.targetY = this.y
+                } else {
+                    // Normal movement with smoothing - more responsive
+                    const smoothing = 0.3;
+                    this.x += (this.targetX - this.x) * smoothing;
+                    this.y += (this.targetY - this.y) * smoothing;
+                }
 
                 // Boundary check
                 const margin = this.size / 2;
                 this.x = Math.max(margin, Math.min(canvas.width - margin, this.x));
-                this.y = Math.max(margin, Math.min(canvas.height - margin - 200, this.y));
+                this.y = Math.max(margin, Math.min(canvas.height - margin, this.y));
+
+                this.targetX = Math.max(margin, Math.min(canvas.width - margin, this.targetX));
+                this.targetY = Math.max(margin, Math.min(canvas.height - margin, this.targetY));
 
                 // Update dashing state
                 if (gameState.isDashing && Date.now() > gameState.dashEndTime) {
                     gameState.isDashing = false;
+                    this.dashVelX = 0;
+                    this.dashVelY = 0;
                 }
             }
 
@@ -945,7 +1313,7 @@
 
                 // Engine glow
                 if (!gameState.isDashing) {
-                    ctx.fillStyle = 'rgba(56, 189, 248, 0.5)';
+                    ctx.fillStyle = CONFIG.colors.player + '80';
                     ctx.beginPath();
                     ctx.moveTo(centerX - size / 2, centerY - size / 4);
                     ctx.lineTo(centerX - size - Math.random() * 10, centerY);
@@ -958,20 +1326,20 @@
             }
 
             move(direction) {
-                const speed = gameState.isDashing ? CONFIG.player.dashSpeed : this.speed;
+                const moveAmount = CONFIG.player.speed * 2;
                 
                 switch(direction) {
                     case 'up':
-                        this.velocityY -= speed;
+                        this.targetY -= moveAmount;
                         break;
                     case 'down':
-                        this.velocityY += speed;
+                        this.targetY += moveAmount;
                         break;
                     case 'left':
-                        this.velocityX -= speed;
+                        this.targetX -= moveAmount;
                         break;
                     case 'right':
-                        this.velocityX += speed;
+                        this.targetX += moveAmount;
                         break;
                 }
             }
@@ -982,11 +1350,21 @@
                     gameState.dashEndTime = Date.now() + CONFIG.player.dashDuration;
                     gameState.lastDashTime = Date.now();
                     
-                    // Boost velocity in current direction
-                    if (Math.abs(this.velocityX) > 0 || Math.abs(this.velocityY) > 0) {
-                        const mag = Math.sqrt(this.velocityX ** 2 + this.velocityY ** 2);
-                        this.velocityX = (this.velocityX / mag) * CONFIG.player.dashSpeed * 2;
-                        this.velocityY = (this.velocityY / mag) * CONFIG.player.dashSpeed * 2;
+                    // Calculate dash direction based on current movement
+                    const moveX = this.targetX - this.x;
+                    const moveY = this.targetY - this.y;
+                    const moveMag = Math.sqrt(moveX * moveX + moveY * moveY);
+                    
+                    const dashSpeed = CONFIG.player.dashSpeed * 3;
+                    
+                    if (moveMag > 5) {
+                        // Dash in the direction the player is moving
+                        this.dashVelX = (moveX / moveMag) * dashSpeed;
+                        this.dashVelY = (moveY / moveMag) * dashSpeed;
+                    } else {
+                        // Default dash forward (right) if not moving
+                        this.dashVelX = dashSpeed;
+                        this.dashVelY = 0;
                     }
                 }
             }
@@ -1011,7 +1389,7 @@
 
         // ==================== OBSTACLE CLASSES ====================
         class Obstacle {
-            constructor(beatTime, type, y = null) {
+            constructor(beatTime, type) {
                 this.beatTime = beatTime;
                 this.type = type;
                 this.spawnTime = Date.now();
@@ -1024,14 +1402,27 @@
                 if (type === 'square') {
                     this.width = 40;
                     this.height = 40;
-                    this.y = y !== null ? y : Math.random() * (canvas.height - 250);
+                    this.y = Math.random() * (canvas.height - this.height);
                     this.x = canvas.width + this.width;
                     this.damage = 1;
                 } else if (type === 'laser') {
-                    this.y = y !== null ? y : Math.random() * (canvas.height - 350) + 50;
-                    this.height = 10;
-                    this.width = canvas.width;
-                    this.x = 0;
+                    // Determine if horizontal or vertical laser
+                    this.xAxis = Math.random() > 0.5;
+                    
+                    if (this.xAxis) {
+                        // Horizontal laser - spans full width, positioned at Y
+                        this.y = Math.random() * (canvas.height - 60) + 30;
+                        this.x = 0;
+                        this.width = canvas.width;
+                        this.height = 10;
+                    } else {
+                        // Vertical laser - spans full height, positioned at X
+                        this.x = Math.random() * (canvas.width - 60) + 30;
+                        this.y = 0;
+                        this.width = 10;
+                        this.height = canvas.height;
+                    }
+
                     this.warningEndTime = Date.now() + difficulty.warningTime;
                     this.activeEndTime = this.warningEndTime + difficulty.laserDuration;
                     this.damage = 1;
@@ -1075,27 +1466,43 @@
                     ctx.restore();
                 } else if (this.type === 'laser') {
                     ctx.save();
+                    
                     if (this.isWarning) {
                         ctx.strokeStyle = CONFIG.colors.laserWarning;
                         ctx.lineWidth = 2;
                         ctx.setLineDash([10, 10]);
                         ctx.shadowBlur = 10;
                         ctx.shadowColor = CONFIG.colors.laserWarning;
+                        
+                        if (this.xAxis) {
+                            // Horizontal laser warning
+                            const laserTop = this.y - this.height / 2;
+                            ctx.beginPath();
+                            ctx.moveTo(0, laserTop);
+                            ctx.lineTo(canvas.width, laserTop);
+                            ctx.stroke();
+                        } else {
+                            // Vertical laser warning
+                            const laserLeft = this.x - this.width / 2;
+                            ctx.beginPath();
+                            ctx.moveTo(laserLeft, 0);
+                            ctx.lineTo(laserLeft, canvas.height);
+                            ctx.stroke();
+                        }
                     } else {
                         ctx.fillStyle = CONFIG.colors.laserActive;
                         ctx.shadowBlur = 30;
                         ctx.shadowColor = CONFIG.colors.laserActive;
-                    }
-                    
-                    const y = this.y - (this.isWarning ? this.height/2 : this.height/2);
-                    
-                    if (this.isWarning) {
-                        ctx.beginPath();
-                        ctx.moveTo(0, this.y);
-                        ctx.lineTo(canvas.width, this.y);
-                        ctx.stroke();
-                    } else {
-                        ctx.fillRect(0, y, this.width, this.height);
+                        
+                        if (this.xAxis) {
+                            // Horizontal laser
+                            const laserTop = this.y - this.height / 2;
+                            ctx.fillRect(0, laserTop, this.width, this.height);
+                        } else {
+                            // Vertical laser
+                            const laserLeft = this.x - this.width / 2;
+                            ctx.fillRect(laserLeft, 0, this.width, this.height);
+                        }
                     }
                     ctx.restore();
                 }
@@ -1114,12 +1521,23 @@
                         py - ps < this.y + this.height/2
                     );
                 } else if (this.type === 'laser' && !this.isWarning) {
-                    const laserTop = this.y - this.height/2;
-                    const laserBottom = this.y + this.height/2;
-                    return (
-                        py + ps > laserTop &&
-                        py - ps < laserBottom
-                    );
+                    if (this.xAxis) {
+                        // Horizontal laser collision
+                        const laserTop = this.y - this.height/2;
+                        const laserBottom = this.y + this.height/2;
+                        return (
+                            py + ps > laserTop &&
+                            py - ps < laserBottom
+                        );
+                    } else {
+                        // Vertical laser collision
+                        const laserLeft = this.x - this.width/2;
+                        const laserRight = this.x + this.width/2;
+                        return (
+                            px + ps > laserLeft &&
+                            px - ps < laserRight
+                        );
+                    }
                 }
                 return false;
             }
@@ -1146,82 +1564,100 @@
         function detectBeats(audioBuffer) {
             const channelData = audioBuffer.getChannelData(0);
             const sampleRate = audioBuffer.sampleRate;
-            const duration = audioBuffer.duration;
             
             const beats = [];
             const sensitivity = CONFIG.difficulties[gameState.difficulty].beatSensitivity;
-            const threshold = 0.3 * sensitivity;
-            const minInterval = 0.2; // Minimum 200ms between beats
+            const threshold = 0.35 * sensitivity; // Higher threshold = less sensitive
+            const minInterval = 0.35; // Minimum 350ms between beats
             
             let lastBeatTime = 0;
             
             // Analyze in chunks for performance
-            const chunkSize = 1024;
-            let energySum = 0;
-            let energyCount = 0;
-            let localMax = 0;
-            let localMaxTime = 0;
+            const chunkSize = 512;
             
-            for (let i = 0; i < channelData.length; i += chunkSize) {
-                const chunk = channelData.slice(i, i + chunkSize);
-                
-                // Calculate RMS energy
+            for (let i = 0; i < channelData.length - chunkSize; i += chunkSize) {
+                // Calculate RMS energy for current chunk
                 let energy = 0;
-                for (let j = 0; j < chunk.length; j++) {
-                    energy += chunk[j] * chunk[j];
+                for (let j = 0; j < chunkSize; j++) {
+                    const sample = channelData[i + j];
+                    energy += sample * sample;
                 }
-                energy = Math.sqrt(energy / chunk.length);
+                energy = Math.sqrt(energy / chunkSize);
                 
                 const time = i / sampleRate;
                 
-                // Detect peaks
-                if (energy > threshold && energy > localMax) {
-                    localMax = energy;
-                    localMaxTime = time;
-                }
-                
-                // Local maximum detected, check if it's a beat
-                if (i + chunkSize < channelData.length) {
-                    const nextChunk = channelData.slice(i + chunkSize, i + chunkSize * 2);
-                    let nextEnergy = 0;
-                    for (let j = 0; j < nextChunk.length; j++) {
-                        nextEnergy += nextChunk[j] * nextChunk[j];
-                    }
-                    nextEnergy = Math.sqrt(nextEnergy / nextChunk.length);
+                // Simple peak detection: energy higher than neighbors
+                if (energy > threshold) {
+                    // Check if this is a local maximum
+                    let prevEnergy = 0, nextEnergy = 0;
                     
-                    // If we passed the peak
-                    if (nextEnergy < localMax && localMax > threshold) {
+                    // Previous chunk
+                    if (i > 0) {
+                        for (let j = 0; j < chunkSize; j++) {
+                            prevEnergy += channelData[i - chunkSize + j] * channelData[i - chunkSize + j];
+                        }
+                        prevEnergy = Math.sqrt(prevEnergy / chunkSize);
+                    }
+                    
+                    // Next chunk
+                    if (i + chunkSize < channelData.length) {
+                        for (let j = 0; j < chunkSize; j++) {
+                            nextEnergy += channelData[i + chunkSize + j] * channelData[i + chunkSize + j];
+                        }
+                        nextEnergy = Math.sqrt(nextEnergy / chunkSize);
+                    }
+                    
+                    // Check if current is peak (must be significantly higher)
+                    const peakThreshold = threshold * 1.2;
+                    if (energy >= prevEnergy * 1.1 && energy > nextEnergy * 1.1 && energy > peakThreshold) {
                         if (time - lastBeatTime >= minInterval) {
-                            // Determine beat type based on energy and position
-                            let beatType = 'normal';
-                            if (localMax > threshold * 2) {
+                            // Determine beat type based on energy
+                            let beatType = 'square';
+                            const energyRatio = energy / threshold;
+                            
+                            if (energyRatio > 4) {
+                                beatType = Math.random() > 0.3 ? 'laser' : 'square';
+                            } else if (energyRatio > 2.5) {
                                 beatType = Math.random() > 0.5 ? 'laser' : 'square';
-                            } else if (localMax > threshold * 1.5) {
+                            } else if (energyRatio > 1.8) {
                                 beatType = Math.random() > 0.7 ? 'laser' : 'square';
-                            } else {
-                                beatType = 'square';
                             }
                             
-                            // Even distribution of lasers
-                            const recentLasers = beats.filter(b => b.type === 'laser' && time - b.time < 2).length;
-                            if (beatType === 'laser' && recentLasers >= 2) {
+                            // Limit lasers more strictly
+                            const recentLasers = beats.filter(b => b.type === 'laser' && time - b.time < 4).length;
+                            const recentBeats = beats.filter(b => time - b.time < 2).length;
+                            if (beatType === 'laser' && (recentLasers >= 1 || recentBeats > 3)) {
                                 beatType = 'square';
                             }
                             
                             beats.push({
-                                time: localMaxTime,
+                                time: time,
                                 type: beatType,
                                 spawned: false
                             });
                             lastBeatTime = time;
                         }
-                        localMax = 0;
-                        localMaxTime = 0;
                     }
                 }
+            }
+            
+            // If no beats detected, generate rhythmic fallback beats
+            if (beats.length < 3) {
+                const duration = audioBuffer.duration;
+                const bpm = 100; // Slower default BPM
+                const beatInterval = 60 / bpm;
                 
-                energySum += energy;
-                energyCount++;
+                for (let t = 2; t < duration - 2; t += beatInterval) {
+                    if (t - lastBeatTime >= minInterval) {
+                        const beatType = Math.random() > 0.8 ? 'laser' : 'square';
+                        beats.push({
+                            time: t,
+                            type: beatType,
+                            spawned: false
+                        });
+                        lastBeatTime = t;
+                    }
+                }
             }
             
             // Sort by time
@@ -1232,23 +1668,27 @@
 
         // ==================== SPAWN LOGIC ====================
         function calculateSpawnTime(beatTime) {
-            const screenDistance = canvas.width - 150; // Player position to right edge
+            const visualBuffer = 200; // Extra pixels for visual buffer
+            const screenDistance = canvas.width - 150 + visualBuffer; // Player position to right edge + buffer
             const speed = CONFIG.difficulties[gameState.difficulty].speedMultiplier * 500;
             const travelTime = (screenDistance / speed) * 1000; // in milliseconds
             return (beatTime * 1000) - travelTime;
         }
 
         function spawnObstacles() {
-            if (!gameState.playing) return;
+            if (!gameState.playing || gameState.paused) return;
             
             const now = Date.now() - gameState.startTime;
-            const difficulty = CONFIG.difficulties[gameState.difficulty];
             
-            for (let i = gameState.currentBeatIndex; i < gameState.beats.length; i++) {
+            // Check all beats, not just from current index
+            for (let i = 0; i < gameState.beats.length; i++) {
                 const beat = gameState.beats[i];
+                
+                if (beat.spawned) continue;
+                
                 const spawnTime = calculateSpawnTime(beat.time);
                 
-                if (now >= spawnTime && !beat.spawned) {
+                if (now >= spawnTime) {
                     beat.spawned = true;
                     
                     // Check if we should spawn based on difficulty and beat
@@ -1263,11 +1703,7 @@
                     if (shouldSpawn) {
                         gameState.obstacles.push(new Obstacle(beat.time, beat.type));
                     }
-                    
-                    gameState.currentBeatIndex = i + 1;
                 }
-                
-                if (spawnTime > now) break;
             }
         }
 
@@ -1365,18 +1801,41 @@
         function togglePause() {
             if (!gameState.playing) return;
             
+            // Toggle paused state
             gameState.paused = !gameState.paused;
+            
+            // Update UI
             document.getElementById('pauseMenu').classList.toggle('visible', gameState.paused);
             
             if (gameState.paused) {
-                gameState.pausedTime = Date.now() - gameState.startTime - gameState.elapsedTime;
-                if (gameState.audioSource) {
-                    gameState.audioSource.suspend();
+                // Record when we paused for accurate time tracking
+                gameState.pauseStartTime = Date.now();
+                
+                // Pause audio using multiple methods for reliability
+                if (gameState.audioSource && gameState.audioContext) {
+                    try {
+                        // Method 1: Suspend the audio context (most reliable)
+                        if (gameState.audioContext.state === 'running') {
+                            gameState.audioContext.suspend();
+                        }
+                    } catch (e) {
+                        console.warn('Could not suspend audio context:', e);
+                    }
                 }
             } else {
-                gameState.startTime = Date.now() - gameState.pausedTime - gameState.elapsedTime;
-                if (gameState.audioSource) {
-                    gameState.audioSource.resume();
+                // Adjust start time to account for pause duration
+                const pauseDuration = Date.now() - gameState.pauseStartTime;
+                gameState.startTime += pauseDuration;
+                
+                // Resume audio
+                if (gameState.audioSource && gameState.audioContext) {
+                    try {
+                        if (gameState.audioContext.state === 'suspended') {
+                            gameState.audioContext.resume();
+                        }
+                    } catch (e) {
+                        console.warn('Could not resume audio context:', e);
+                    }
                 }
             }
         }
@@ -1418,6 +1877,20 @@
             shakeIntensity = 15;
         }
 
+        // Helper function to update START button visibility
+        function updateStartButtonVisibility() {
+            const startBtn = document.getElementById('startBtn');
+            // Show START button only when difficulty is selected AND song is loaded
+            const songLoaded = document.getElementById('fileBtn').classList.contains('loaded');
+            const difficultySelected = gameState.difficulty !== 'none';
+            
+            if (songLoaded && difficultySelected) {
+                startBtn.classList.add('visible');
+            } else {
+                startBtn.classList.remove('visible');
+            }
+        }
+
         // ==================== MENU SETUP ====================
         function setupMenu() {
             // Difficulty buttons
@@ -1426,6 +1899,17 @@
                     document.querySelectorAll('.difficulty-btn').forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
                     gameState.difficulty = btn.dataset.difficulty;
+                    
+                    // Update menu background color
+                    const mainMenu = document.getElementById('mainMenu');
+                    if (gameState.difficulty === 'none') {
+                        mainMenu.removeAttribute('data-difficulty');
+                    } else {
+                        mainMenu.setAttribute('data-difficulty', gameState.difficulty);
+                    }
+                    
+                    // Update START button visibility
+                    updateStartButtonVisibility();
                 });
             });
 
@@ -1458,13 +1942,16 @@
             const fileBtn = document.getElementById('fileBtn');
             const songInfo = document.getElementById('songInfo');
             
-            fileBtn.addEventListener('click', () => audioFile.click());
+            fileBtn.addEventListener('click', () => {
+                audioFile.value = null;
+                audioFile.click();
+            });
             
-            audioFile.addEventListener('change', async (e) => {
+            audioFile.addEventListener("change", async (e) => {
                 const file = e.target.files[0];
                 if (!file) return;
                 
-                fileBtn.textContent = '⏳ Loading...';
+                fileBtn.textContent = 'Loading...';
                 fileBtn.classList.add('loading');
                 
                 try {
@@ -1494,9 +1981,11 @@
                     songInfo.textContent = `${file.name} - ${formatTime(duration)} - ${gameState.beats.length} beats detected`;
                     songInfo.classList.add('visible');
                     
-                    fileBtn.textContent = '✓ Song Loaded';
+                    fileBtn.textContent = 'Song Loaded';
                     fileBtn.classList.add('loaded');
-                    document.getElementById('startBtn').classList.add('visible');
+                    
+                    // Update START button visibility
+                    updateStartButtonVisibility();
                     
                 } catch (err) {
                     console.error('Error loading audio:', err);
@@ -1533,6 +2022,13 @@
             document.getElementById('hud').classList.add('visible');
             document.getElementById('mobileControls').classList.add('visible');
             
+            // Set body difficulty attribute for CSS theming
+            document.body.setAttribute('data-difficulty', gameState.difficulty);
+            
+            // Apply difficulty-specific colors to CONFIG
+            const difficultyColors = DIFFICULTY_COLORS[gameState.difficulty];
+            CONFIG.colors = { ...difficultyColors };
+            
             // Reset game state
             gameState.playing = true;
             gameState.paused = false;
@@ -1546,6 +2042,13 @@
             gameState.isDashing = false;
             gameState.lastDashTime = 0;
             gameState.lastHitTime = 0;
+            
+            // Reset beat spawn status so obstacles load on retry
+            if (gameState.beats) {
+                gameState.beats.forEach(beat => {
+                    beat.spawned = false;
+                });
+            }
             
             // Initialize player
             gameState.player = new Player();
@@ -1598,6 +2101,21 @@
             document.getElementById('mobileControls').classList.remove('visible');
             document.getElementById('pauseMenu').classList.remove('visible');
             document.getElementById('mainMenu').classList.remove('hidden');
+            document.getElementById('mainMenu').removeAttribute('data-difficulty');
+            
+            // Remove difficulty attribute from body
+            document.body.removeAttribute('data-difficulty');
+            
+            // Reset CONFIG colors to default
+            CONFIG.colors = {
+                player: '#38bdf8',
+                playerDash: '#ffffff',
+                obstacle: '#f472b6',
+                laserWarning: 'rgba(250, 204, 21, 0.4)',
+                laserActive: '#ef4444',
+                background: '#0f172a',
+                grid: '#1e293b'
+            };
             
             // Reset state
             gameState.menu = true;
@@ -1607,11 +2125,16 @@
             gameState.obstacles = [];
             gameState.elapsedTime = 0;
             
+            // Reset difficulty selector
+            document.querySelectorAll('.difficulty-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector('.difficulty-btn[data-difficulty="none"]')?.classList.add('active');
+            
             // Reset file button
+            document.getElementById('audioFile').value = '';
             document.getElementById('fileBtn').textContent = 'Select Song';
             document.getElementById('fileBtn').classList.remove('loaded');
             document.getElementById('songInfo').classList.remove('visible');
-            document.getElementById('startBtn').classList.remove('visible');
+            updateStartButtonVisibility();
         }
 
         // ==================== RENDERING ====================
@@ -1708,12 +2231,13 @@
                 if (shakeIntensity < 0.5) shakeIntensity = 0;
             }
             
-            // Draw obstacles
-            gameState.obstacles.forEach(obs => obs.draw());
-            
-            // Draw player
-            if (gameState.player) {
-                gameState.player.draw();
+            // Draw obstacles and player (only when not paused)
+            if (!gameState.paused) {
+                gameState.obstacles.forEach(obs => obs.draw());
+                
+                if (gameState.player) {
+                    gameState.player.draw();
+                }
             }
             
             if (shakeIntensity > 0 || (shakeIntensity === 0 && ctx.currentTransform)) {
