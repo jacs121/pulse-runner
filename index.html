@@ -479,6 +479,71 @@
             transition: width 0.1s ease;
         }
 
+        /* Landscape Required Overlay */
+        #landscapeOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            touch-action: none;
+        }
+
+        #landscapeOverlay.visible {
+            display: flex;
+        }
+
+        .landscape-message {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .landscape-icon-container {
+            font-size: 5rem;
+            margin-bottom: 1.5rem;
+            animation: rotatePhone 2s ease-in-out infinite;
+        }
+
+        @keyframes rotatePhone {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(15deg); }
+            75% { transform: rotate(-15deg); }
+        }
+
+        .landscape-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            color: #ef4444;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+            letter-spacing: 3px;
+        }
+
+        .landscape-subtitle {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            color: #94a3b8;
+            margin-bottom: 0.5rem;
+            letter-spacing: 2px;
+        }
+
+        .landscape-hint {
+            font-family: 'Roboto', sans-serif;
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-top: 2rem;
+            padding: 1rem 2rem;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            background: rgba(30, 41, 59, 0.5);
+        }
+
         /* HUD */
         #hud {
             position: absolute;
@@ -762,10 +827,10 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 200px;
+            height: 240px;
             display: none;
             z-index: 25;
-            padding: 1rem;
+            padding: 1.5rem;
         }
 
         @media (max-width: 768px) {
@@ -778,22 +843,23 @@
 
         .d-pad {
             display: grid;
-            grid-template-columns: repeat(3, 60px);
-            grid-template-rows: repeat(3, 60px);
-            gap: 4px;
+            grid-template-columns: repeat(3, 70px);
+            grid-template-rows: repeat(3, 70px);
+            gap: 6px;
         }
 
         .d-pad-btn {
             background: rgba(56, 189, 248, 0.3);
             border: 2px solid rgba(56, 189, 248, 0.5);
-            border-radius: 8px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             color: #38bdf8;
             touch-action: manipulation;
             cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .d-pad-btn:active {
@@ -809,18 +875,18 @@
         .action-buttons {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 1.5rem;
         }
 
         .action-btn {
-            width: 80px;
-            height: 80px;
+            width: 90px;
+            height: 90px;
             border-radius: 50%;
-            border: 3px solid rgba(56, 189, 248, 0.6);
+            border: 4px solid rgba(56, 189, 248, 0.6);
             background: rgba(56, 189, 248, 0.2);
             color: #38bdf8;
             font-family: 'Orbitron', sans-serif;
-            font-size: 0.7rem;
+            font-size: 0.8rem;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -828,6 +894,7 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .action-btn:active {
@@ -1030,6 +1097,17 @@
         </div>
     </div>
 
+    <!-- Landscape Required Overlay -->
+    <div id="landscapeOverlay">
+        <div class="landscape-message">
+            <div class="landscape-icon-container">📱↻</div>
+            <h2 class="landscape-title">ROTATE YOUR DEVICE</h2>
+            <p class="landscape-subtitle">Please rotate to landscape mode</p>
+            <p class="landscape-subtitle" style="color: #64748b;">Game is paused until device is rotated</p>
+            <div class="landscape-hint">Tap anywhere to enter fullscreen</div>
+        </div>
+    </div>
+
     <!-- HUD -->
     <div id="hud">
         <div class="progress-container">
@@ -1070,7 +1148,6 @@
         <div class="pause-section">
             <div class="menu-section-title">Volume</div>
             <div class="volume-control">
-                <span class="volume-icon">🔊</span>
                 <input type="range" class="volume-slider" id="pauseVolumeSlider" min="0" max="100" value="70">
                 <span class="volume-value" id="pauseVolumeValue">70%</span>
             </div>
@@ -1153,7 +1230,7 @@
                     maxHealth: 6,
                     warningTime: 2000,
                     laserDuration: 300,
-                    beatSensitivity: 1.0
+                    beatSensitivity: 0.75
                 },
                 medium: {
                     name: 'Medium',
@@ -1202,7 +1279,10 @@
                 grid: '#1e293b'
             }
         };
-
+        
+        // Fixed time step for consistent gameplay across different refresh rates
+        const FIXED_DELTA_TIME = 1 / 60;
+        
         // ==================== GAME STATE ====================
         const gameState = {
             menu: true,
@@ -1231,7 +1311,8 @@
             lastDashTime: 0,
             isDashing: false,
             dashEndTime: 0,
-            lastHitTime: 0
+            lastHitTime: 0,
+            mobileInputStarted: false
         };
 
         // ==================== CANVAS SETUP ====================
@@ -1239,8 +1320,39 @@
         const ctx = canvas.getContext('2d');
 
         function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+            
+            // Check if mobile device
+            const isMobile = ('ontouchstart' in window) || 
+                            (navigator.maxTouchPoints > 0) || 
+                            (navigator.userAgent.includes('Mobile'));
+            
+            if (isMobile) {
+                // Fixed wide aspect ratio (16:9) for mobile
+                const targetAspect = 16 / 9;
+                const windowAspect = windowWidth / windowHeight;
+                
+                if (windowAspect > targetAspect) {
+                    // Window is wider than target - constrain by height
+                    canvas.height = windowHeight;
+                    canvas.width = windowHeight * targetAspect;
+                } else {
+                    // Window is narrower than target - constrain by width
+                    canvas.width = windowWidth;
+                    canvas.height = windowWidth / targetAspect;
+                }
+                
+                // Center the canvas
+                canvas.style.left = ((windowWidth - canvas.width) / 2) + 'px';
+                canvas.style.top = ((windowHeight - canvas.height) / 2) + 'px';
+            } else {
+                // PC: full window size
+                canvas.width = windowWidth;
+                canvas.height = windowHeight;
+                canvas.style.left = '0';
+                canvas.style.top = '0';
+            }
         }
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
@@ -1432,7 +1544,7 @@
 
             update() {
                 if (this.type === 'square') {
-                    this.x -= this.speed * (1/60); // Approximate for 60fps
+                    this.x -= this.speed * FIXED_DELTA_TIME;
                     
                     if (this.x + this.width < 0) {
                         this.remove = true;
@@ -1714,7 +1826,9 @@
             keys[e.key.toLowerCase()] = true;
             
             if (e.key === 'Escape' && gameState.playing) {
-                togglePause();
+                if (!gameState.paused) {
+                    togglePause();
+                }
             }
             
             if (e.key === ' ' && gameState.playing && !gameState.paused) {
@@ -1738,16 +1852,59 @@
             if (keys['d'] || keys['arrowright']) player.move('right');
         }
 
-        // Mobile controls
+        // Mobile controls - with hold support
+        let activeTouches = {};
+        let mobileInputRunning = false;
+        
+        function handleMobileTouchStart(e, dir) {
+            e.preventDefault();
+            if (gameState.playing && !gameState.paused) {
+                activeTouches[dir] = true;
+                gameState.player.move(dir);
+            }
+        }
+        
+        function handleMobileTouchEnd(e, dir) {
+            e.preventDefault();
+            activeTouches[dir] = false;
+        }
+        
+        // Continuous input check for held buttons
+        function checkMobileInput() {
+            mobileInputRunning = true;
+            
+            if (gameState.playing && !gameState.paused) {
+                if (activeTouches['up']) gameState.player.move('up');
+                if (activeTouches['down']) gameState.player.move('down');
+                if (activeTouches['left']) gameState.player.move('left');
+                if (activeTouches['right']) gameState.player.move('right');
+            }
+            
+            // Keep loop running even when paused
+            if (mobileInputRunning) {
+                requestAnimationFrame(checkMobileInput);
+            }
+        }
+        
+        function startMobileInput() {
+            if (!mobileInputRunning) {
+                mobileInputRunning = true;
+                requestAnimationFrame(checkMobileInput);
+            }
+        }
+        
         document.querySelectorAll('.d-pad-btn').forEach(btn => {
-            btn.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                if (gameState.playing && !gameState.paused) {
-                    gameState.player.move(btn.dataset.dir);
-                }
-            });
+            const dir = btn.dataset.dir;
+            if (dir) {
+                btn.addEventListener('touchstart', (e) => {
+                    handleMobileTouchStart(e, dir);
+                    startMobileInput();
+                });
+                btn.addEventListener('touchend', (e) => handleMobileTouchEnd(e, dir));
+                btn.addEventListener('touchcancel', (e) => handleMobileTouchEnd(e, dir));
+            }
         });
-
+        
         document.getElementById('dashBtn').addEventListener('touchstart', (e) => {
             e.preventDefault();
             if (gameState.playing && !gameState.paused) {
@@ -1827,6 +1984,9 @@
                 const pauseDuration = Date.now() - gameState.pauseStartTime;
                 gameState.startTime += pauseDuration;
                 
+                // Clear pause reason since we're manually resuming
+                gameState.pauseReason = undefined;
+                
                 // Resume audio
                 if (gameState.audioSource && gameState.audioContext) {
                     try {
@@ -1847,6 +2007,9 @@
             if (gameState.audioSource) {
                 gameState.audioSource.stop();
             }
+            
+            // Unlock screen orientation and lock to portrait for menu
+            lockScreenOrientationPortrait();
             
             const endScreen = document.getElementById('endScreen');
             const endTitle = document.getElementById('endTitle');
@@ -1875,6 +2038,266 @@
         let shakeIntensity = 0;
         function shakeScreen() {
             shakeIntensity = 15;
+        }
+
+        // Screen orientation locking for mobile
+        async function lockScreenOrientation() {
+            if (!screen.orientation) {
+                console.log('Screen Orientation API not supported');
+                return;
+            }
+            if (!screen.orientation.lock) {
+                console.log('Screen orientation lock not available');
+                return;
+            }
+            try {
+                await screen.orientation.lock('landscape');
+                console.log('Screen locked to landscape');
+            } catch (e) {
+                console.log('Could not lock screen orientation to landscape:', e.message);
+            }
+        }
+
+        async function lockScreenOrientationPortrait() {
+            if (!screen.orientation) {
+                console.log('Screen Orientation API not supported');
+                return;
+            }
+            if (!screen.orientation.lock) {
+                console.log('Screen orientation lock not available');
+                return;
+            }
+            try {
+                await screen.orientation.lock('portrait');
+                console.log('Screen locked to portrait');
+            } catch (e) {
+                console.log('Could not lock screen orientation to portrait:', e.message);
+            }
+        }
+
+        async function unlockScreenOrientation() {
+            if (!screen.orientation) {
+                return;
+            }
+            if (!screen.orientation.unlock) {
+                return;
+            }
+            try {
+                screen.orientation.unlock();
+            } catch (e) {
+                console.log('Could not unlock screen orientation:', e.message);
+            }
+        }
+
+        // Fullscreen change tracking
+        let isInFullscreen = false;
+        let wasPlayingWhenFullscreenExited = false;
+        
+        // Fullscreen functions
+        async function enterFullscreen() {
+            const elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                try {
+                    await elem.requestFullscreen();
+                } catch (e) {
+                    console.log('Could not enter fullscreen:', e.message);
+                }
+            } else if (elem.webkitRequestFullscreen) {
+                try {
+                    await elem.webkitRequestFullscreen();
+                } catch (e) {
+                    console.log('Could not enter fullscreen (webkit):', e.message);
+                }
+            } else if (elem.msRequestFullscreen) {
+                try {
+                    await elem.msRequestFullscreen();
+                } catch (e) {
+                    console.log('Could not enter fullscreen (ms):', e.message);
+                }
+            }
+        }
+        
+        // Setup fullscreen change listener
+        function setupFullscreenListener() {
+            const documentElem = document.documentElement;
+            
+            // Listen for fullscreen change events (cross-browser support)
+            document.addEventListener('fullscreenchange', () => {
+                handleFullscreenChange();
+            });
+            document.addEventListener('webkitfullscreenchange', () => {
+                handleFullscreenChange();
+            });
+            document.addEventListener('mozfullscreenchange', () => {
+                handleFullscreenChange();
+            });
+            document.addEventListener('MSFullscreenChange', () => {
+                handleFullscreenChange();
+            });
+        }
+        
+        function handleFullscreenChange() {
+            // Check if we're currently in fullscreen
+            const isFullscreen = !!(
+                document.fullscreenElement ||
+                document.webkitFullscreenElement ||
+                document.mozFullScreenElement ||
+                document.msFullscreenElement
+            );
+            
+            if (!isFullscreen && isInFullscreen) {
+                // Fullscreen was exited
+                console.log('Fullscreen exited');
+                isInFullscreen = false;
+                
+                // If we were playing, pause the game and show pause menu
+                if (gameState.playing && !gameState.paused) {
+                    wasPlayingWhenFullscreenExited = true;
+                    gameState.paused = true;
+                    gameState.pauseReason = 'fullscreen';
+                    gameState.pauseStartTime = Date.now();
+                    
+                    // Pause audio
+                    if (gameState.audioSource && gameState.audioContext) {
+                        try {
+                            if (gameState.audioContext.state === 'running') {
+                                gameState.audioContext.suspend();
+                            }
+                        } catch (e) {
+                            console.warn('Could not suspend audio context:', e);
+                        }
+                    }
+                    
+                    // Show pause menu
+                    document.getElementById('pauseMenu').classList.add('visible');
+                    console.log('Game paused - fullscreen exited');
+                }
+            } else if (isFullscreen) {
+                // Entered fullscreen
+                console.log('Fullscreen entered');
+                isInFullscreen = true;
+            }
+        }
+
+        function isLandscape() {
+            return window.innerWidth > window.innerHeight;
+        }
+
+        function isMobileDevice() {
+            return ('ontouchstart' in window) || 
+                   (navigator.maxTouchPoints > 0) || 
+                   (navigator.userAgent.includes('Mobile'));
+        }
+
+        // Orientation monitoring state
+        let isOrientationCheckActive = false;
+        
+        function updateLandscapeOverlay() {
+            const overlay = document.getElementById('landscapeOverlay');
+            if (isMobileDevice() && !isLandscape()) {
+                overlay.classList.add('visible');
+                return true;
+            } else {
+                overlay.classList.remove('visible');
+                return false;
+            }
+        }
+        
+        function checkOrientationAndPause() {
+            // Only check orientation when game is playing
+            if (!gameState.playing) {
+                isOrientationCheckActive = false;
+                return;
+            }
+            
+            isOrientationCheckActive = true;
+            
+            if (isMobileDevice() && !isLandscape()) {
+                // User is in portrait mode on mobile - pause the game
+                if (!gameState.paused) {
+                    gameState.paused = true;
+                    gameState.pauseReason = 'orientation';
+                    
+                    // Record pause time for accurate time tracking
+                    gameState.pauseStartTime = Date.now();
+                    
+                    // Pause audio
+                    if (gameState.audioSource && gameState.audioContext) {
+                        try {
+                            if (gameState.audioContext.state === 'running') {
+                                gameState.audioContext.suspend();
+                            }
+                        } catch (e) {
+                            console.warn('Could not suspend audio context:', e);
+                        }
+                    }
+                    
+                    console.log('Game paused - device in portrait mode');
+                }
+                
+                // Show overlay
+                updateLandscapeOverlay();
+            } else {
+                // User is in landscape mode or on PC
+                updateLandscapeOverlay();
+                
+                // If we were paused due to orientation and now in landscape, auto-resume
+                if (gameState.paused && gameState.pauseReason === 'orientation') {
+                    resumeFromOrientationPause();
+                }
+            }
+        }
+        
+        function resumeFromOrientationPause() {
+            // Only resume if we were paused due to orientation
+            if (gameState.paused && gameState.pauseReason === 'orientation') {
+                gameState.paused = false;
+                gameState.pauseReason = undefined;
+                
+                // Adjust start time to account for pause duration
+                const pauseDuration = Date.now() - gameState.pauseStartTime;
+                gameState.startTime += pauseDuration;
+                
+                // Resume audio
+                if (gameState.audioSource && gameState.audioContext) {
+                    try {
+                        if (gameState.audioContext.state === 'suspended') {
+                            gameState.audioContext.resume();
+                        }
+                    } catch (e) {
+                        console.warn('Could not resume audio context:', e);
+                    }
+                }
+                
+                console.log('Game resumed - device now in landscape mode');
+            }
+        }
+        
+        // Handle orientation change events
+        function setupOrientationListener() {
+            if (screen.orientation) {
+                screen.orientation.addEventListener('change', () => {
+                    console.log('Orientation changed:', screen.orientation.type);
+                    checkOrientationAndPause();
+                });
+            } else {
+                // Fallback for browsers that don't support orientation change event
+                window.addEventListener('resize', () => {
+                    checkOrientationAndPause();
+                });
+            }
+        }
+        
+        // Tap anywhere on landscape overlay to enter fullscreen
+        function setupLandscapeOverlayTap() {
+            const overlay = document.getElementById('landscapeOverlay');
+            overlay.addEventListener('click', () => {
+                enterFullscreen();
+            });
+            overlay.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                enterFullscreen();
+            });
         }
 
         // Helper function to update START button visibility
@@ -1999,7 +2422,17 @@
             document.getElementById('startBtn').addEventListener('click', startGame);
 
             // Pause menu buttons
-            document.getElementById('resumeBtn').addEventListener('click', togglePause);
+            document.getElementById('resumeBtn').addEventListener('click', () => {
+                // Check if we were paused due to fullscreen exit
+                const wasPausedForFullscreen = gameState.pauseReason === 'fullscreen';
+                
+                // Toggle pause state
+                togglePause();
+                
+                // If we were paused due to fullscreen exit, try to re-enter fullscreen
+                // This must be done within the click handler (user gesture)
+                enterFullscreen();
+            });
             document.getElementById('quitBtn').addEventListener('click', () => {
                 togglePause();
                 returnToMenu();
@@ -2033,6 +2466,7 @@
             gameState.playing = true;
             gameState.paused = false;
             gameState.ended = false;
+            gameState.pauseReason = undefined;
             gameState.obstacles = [];
             gameState.score = 0;
             gameState.combo = 0;
@@ -2042,6 +2476,20 @@
             gameState.isDashing = false;
             gameState.lastDashTime = 0;
             gameState.lastHitTime = 0;
+            
+            // Lock screen orientation on mobile and enter fullscreen
+            // These must be called from a user gesture (click event)
+            lockScreenOrientation();
+            enterFullscreen();
+            
+            // Activate orientation and fullscreen monitoring
+            setupOrientationListener();
+            setupFullscreenListener();
+            
+            // Initial orientation check
+            setTimeout(() => {
+                checkOrientationAndPause();
+            }, 100);
             
             // Reset beat spawn status so obstacles load on retry
             if (gameState.beats) {
@@ -2081,8 +2529,9 @@
             gameState.startTime = Date.now();
             gameState.audioSource.start(0);
             
-            // Show mobile controls on touch devices
-            if ('ontouchstart' in window) {
+            // Show mobile controls on actual mobile devices
+            const isMobileDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.userAgent.includes('Mobile'));
+            if (isMobileDevice) {
                 document.getElementById('mobileControls').classList.add('visible');
             }
         }
@@ -2100,6 +2549,7 @@
             document.getElementById('hud').classList.remove('visible');
             document.getElementById('mobileControls').classList.remove('visible');
             document.getElementById('pauseMenu').classList.remove('visible');
+            document.getElementById('landscapeOverlay').classList.remove('visible');
             document.getElementById('mainMenu').classList.remove('hidden');
             document.getElementById('mainMenu').removeAttribute('data-difficulty');
             
@@ -2117,11 +2567,15 @@
                 grid: '#1e293b'
             };
             
+            // Lock screen orientation to portrait for menu
+            lockScreenOrientationPortrait();
+            
             // Reset state
             gameState.menu = true;
             gameState.playing = false;
             gameState.paused = false;
             gameState.ended = false;
+            gameState.pauseReason = undefined;
             gameState.obstacles = [];
             gameState.elapsedTime = 0;
             
@@ -2139,6 +2593,7 @@
 
         // ==================== RENDERING ====================
         let gridOffset = 0;
+        let lastTime = performance.now();
 
         function renderBackground() {
             // Clear canvas
@@ -2156,8 +2611,8 @@
             for (let x = -gridOffset; x < canvas.width + cellSize; x += cellSize) {
                 const perspectiveX = x + (canvas.width - x) * 0.3;
                 ctx.beginPath();
-                ctx.moveTo(perspectiveX, 0);
-                ctx.lineTo(perspectiveX, canvas.height);
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height);
                 ctx.stroke();
             }
             
@@ -2171,48 +2626,69 @@
         }
 
         // ==================== GAME LOOP ====================
-        function gameLoop() {
+        let accumulator = 0;
+        
+        function gameLoop(currentTime) {
             requestAnimationFrame(gameLoop);
+            
+            const deltaTime = (currentTime - lastTime) / 1000; // Convert to seconds
+            lastTime = currentTime;
+            
+            // Check orientation on mobile devices and pause if not in landscape
+            if (gameState.playing) {
+                checkOrientationAndPause();
+            }
             
             renderBackground();
             
             if (gameState.playing && !gameState.paused) {
-                // Update elapsed time
-                gameState.elapsedTime = Date.now() - gameState.startTime;
+                // Accumulate time for fixed time step
+                accumulator += deltaTime;
                 
-                // Handle input
-                handleInput();
+                // Cap accumulator to prevent spiral of death
+                if (accumulator > 0.1) accumulator = 0.1;
                 
-                // Spawn obstacles
-                spawnObstacles();
-                
-                // Update player
-                gameState.player.update();
-                
-                // Update and check obstacles
-                for (let i = gameState.obstacles.length - 1; i >= 0; i--) {
-                    const obstacle = gameState.obstacles[i];
-                    obstacle.update();
+                // Update with fixed time steps
+                while (accumulator >= FIXED_DELTA_TIME) {
+                    // Update elapsed time
+                    gameState.elapsedTime += FIXED_DELTA_TIME * 1000;
                     
-                    if (obstacle.remove) {
-                        gameState.obstacles.splice(i, 1);
-                        continue;
-                    }
+                    // Handle input
+                    handleInput();
                     
-                    // Check collision
-                    if (obstacle.checkCollision(gameState.player)) {
-                        const gameOver = gameState.player.takeDamage();
-                        obstacle.remove = true;
-                        gameState.obstacles.splice(i, 1);
+                    // Spawn obstacles
+                    spawnObstacles();
+                    
+                    // Update player
+                    gameState.player.update();
+                    
+                    // Update and check obstacles
+                    for (let i = gameState.obstacles.length - 1; i >= 0; i--) {
+                        const obstacle = gameState.obstacles[i];
+                        obstacle.update();
                         
-                        if (gameOver) {
-                            endGame(false);
-                            break;
+                        if (obstacle.remove) {
+                            gameState.obstacles.splice(i, 1);
+                            continue;
+                        }
+                        
+                        // Check collision
+                        if (obstacle.checkCollision(gameState.player)) {
+                            const gameOver = gameState.player.takeDamage();
+                            obstacle.remove = true;
+                            gameState.obstacles.splice(i, 1);
+                            
+                            if (gameOver) {
+                                endGame(false);
+                                break;
+                            }
                         }
                     }
+                    
+                    accumulator -= FIXED_DELTA_TIME;
                 }
                 
-                // Update progress bar
+                // Update progress bar (every frame)
                 updateProgressBar();
                 
                 // Check if song ended
@@ -2248,6 +2724,7 @@
         // ==================== INITIALIZATION ====================
         function init() {
             setupMenu();
+            setupLandscapeOverlayTap();
             gameLoop();
         }
 
